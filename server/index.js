@@ -1,8 +1,7 @@
-const express = require('express')
-
+const app = require('express')()
+const http = require('http').createServer(app);
 const port = process.env.PORT || 3001
-
-const app = express()
+const io = require('socket.io')(http)
 
 app.get('/api', (req, res) => {
     res.json({
@@ -10,4 +9,12 @@ app.get('/api', (req, res) => {
     })
 })
 
-app.listen(port, () => console.log('Joe Byron'))
+http.listen(port, () => console.log('Joe Byron'))
+
+io.on('connection', (socket) => {
+    console.log('new client connected')
+
+    socket.on('disconnect', () => {
+        console.log('client disconnected')
+    })
+})
